@@ -15,4 +15,35 @@
   //     margin-bottom: 32px;
   //   }
   // }
+  padding: 8px 100px;
+  margin: 20px 0;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 68px;
+    top: 0;
+    height: 16px;
+    width: 16px;
+    border: solid 3px $theme-color;
+    border-right: unset;
+    border-bottom: unset;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    right: 68px;
+    bottom: 0;
+    height: 16px;
+    width: 16px;
+    border: solid 3px $theme-color;
+    border-left: unset;
+    border-top: unset;
+  }
+
+  .preface {
+    color: $theme-color;
+  }
 }

@@ -11,7 +11,7 @@
   margin-top: 0;
 
   &:target {
-    color: $base-a;
+    color: $theme-color;
   }
 }
 
@@ -22,13 +22,13 @@
   font-family: $heading-font;
   @include font-size(2);
   font-weight: 400;
-  color: $base-a;
+  color: $theme-color;
 }
 
 .MarkdownBody {
   a,
   a:visited {
-    color: $base-b;
+    color: $theme-color;
     text-decoration: none;
   }
 

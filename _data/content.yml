@@ -10,6 +10,8 @@ top_nav:
 
 sheet:
   suffix: cheatsheet
+blog:
+  suffix: blog
 
 social_list:
   default_description: "Ridiculous collection of web development cheatsheets"

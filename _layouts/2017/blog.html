@@ -1,7 +1,7 @@
 <!doctype html>
 <html class='NoJs' lang='en'><head>
 
-{% include 2017/head.html critical='sheet' %}
+{% include 2017/head.html %}
 {% include 2017/article-schema.html page=page %}
 
 </head><body>
@@ -10,7 +10,7 @@
 
 <div class='body-area'>
   <header class='main-heading -center' role='banner'>
-    <h1 class='h1'>{{ page.title }} <em>{{ site.data.content.sheet.suffix }}</em></h1>
+    <h1 class='h1'>{{ page.title }} <em>{{ site.data.content.blog.suffix }}</em></h1>
 
     <div class='adbox' data-js-no-preview>
       {% if site.data.berry.enabled %}
@@ -42,7 +42,7 @@
   {% if page.deprecated_by %}
     <aside class='notice-box'>
       <strong>Deprecated:</strong> This guide covers an older version.
-      <a href='{{ page.deprecated_by }}'>A newer version is available here.</a>
+      <a href='post/{{ page.deprecated_by }}'>A newer version is available here.</a>
     </aside>
   {% endif %}
 
@@ -53,15 +53,15 @@
     </div>
   {% endif %}
 
-  <main class='post-content sheet MarkdownBody' data-js-main-body data-js-anchors role='main'>
+  <main class='post-content blog MarkdownBody' data-js-main-body data-js-anchors role='main'>
     {{ content }}
   </main>
 </div>
 
 <div class='pre-footer' data-js-no-preview><i class='icon'></i></div>
 
-{% include 2017/comments-area.html page=page %}
-{% include 2017/search-footer.html %}
+<!-- {% include 2017/comments-area.html page=page %} -->
+<!-- {% include 2017/search-footer.html %} -->
 {% include 2017/related-posts.html page=page %}
 {% include 2017/foot.html %}
 

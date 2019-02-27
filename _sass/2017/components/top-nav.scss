@@ -41,6 +41,9 @@
   & > .left {
     flex: 0 0 auto;
     line-height: 32px;
+    .home-text {
+      color: $theme-color;
+    }
   }
 
   & > .brand {
