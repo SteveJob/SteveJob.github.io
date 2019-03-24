@@ -5,7 +5,7 @@ module.exports = {
   context: join(__dirname, '..'),
   entry: './_js/critical.js',
   output: {
-    path: join(__dirname, '..', '_includes', '2017', 'critical'),
+    path: join(__dirname, '../assets/packed/'),
     filename: 'critical.js'
   },
   module: {
@@ -19,7 +19,8 @@ module.exports = {
       }
     ]
   },
-  stats: 'minimal',
+  // stats: 'minimal',
+  devtool: 'source-map',
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production'

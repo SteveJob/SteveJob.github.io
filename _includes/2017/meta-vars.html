@@ -17,10 +17,10 @@ It emits some blank lines because Jekyll, lol.
 {% assign depth = page.url | split: '/' | size | minus: 1 %}
 
 {% assign base = '' %}
-{% if depth <= 1 %}{% assign base = '.' %}
-{% elsif depth == 2 %}{% assign base = '..' %}
-{% elsif depth == 3 %}{% assign base = '../..' %}
-{% elsif depth == 4 %}{% assign base = '../../..' %}{% endif %}
+{% if depth <= 2 %}{% assign base = '.' %}
+{% elsif depth == 3 %}{% assign base = '..' %}
+{% elsif depth == 4 %}{% assign base = '../..' %}
+{% elsif depth == 5 %}{% assign base = '../../..' %}{% endif %}
 
 {% assign timestamp = site.time | date: "%Y%m%d%H%M%S" %}
 

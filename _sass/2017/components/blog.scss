@@ -9,7 +9,7 @@
 
   blockquote {
     background-color: #fff;
-    margin: unset;
+    margin: 0 0 20px;
     padding: 10px 40px;
     position: relative;
 
@@ -22,5 +22,12 @@
       top: 0px;
       background-color: #dcdcdc;
     }
+  }
+
+  img {
+    margin: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px #c5c5c5;
+    width: calc(100% - 80px);
   }
 }

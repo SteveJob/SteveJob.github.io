@@ -25,6 +25,7 @@
 
 .MarkdownBody {
   pre {
+    position: relative;
     box-shadow: none;
     border-left: 0;
     overflow: hidden;
@@ -32,6 +33,22 @@
     background: white;
     font-size: $code-size;
     line-height: $code-line-height;
+    padding: 10px 20px;
+    border-radius: 6px;
+    box-shadow: 0 0 30px inset #dcdcdc;
+    margin: 40px 0;
+
+    // &:before {
+    //   content: '';
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 20px;
+    //   height: 20px;
+    //   border-radius: 10px;
+    //   border: solid 10px $theme-color;
+    //   border-right: unset;
+    // }
   }
 
   pre.-wrap {
@@ -45,6 +62,10 @@
     background: transparent;
     overflow: visible;
     font-size: 1em;
+  }
+
+  p > code {
+    font-weight: bolder;
   }
 
   // Line highlight

@@ -31,6 +31,38 @@ const value = localStorage.getItem('key_of_school');
 一个解决办法是通过函数调用，或放进类中等方法动态获取。
 ```
 
+### get element position
+
+```
+function _getOffset(element) {
+  let body = document.body;
+  let docEl = document.documentElement;
+  let scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+  let scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+  let x = element.getBoundingClientRect();
+  return {
+    top: x.top + scrollTop,
+    width: x.width,
+    height: x.height,
+    left: x.left + scrollLeft
+  };
+}
+```
+
+### element attribute
+
+```
+获取DOM element的css属性对象
+CSSStyleDeclaration declaration = document.defaultView.getComputedStyle(element, null)
+根据css属性名获取属性值
+declaration.getPropertyValue('position');
+
+IE兼容办法
+if (element.currentStyle) {
+  propValue = element.currentStyle[propName];
+}
+```
+
 ### Error status
 
 | Code                       | Description                       |

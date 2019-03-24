@@ -200,7 +200,9 @@ https://github.com/terkel/mathsass
 
   // Solve the modular scale function for the ratio.
   @return ms-pow(($v/$b),(1/$t));
-}@function ms-function($v: 0, $base: false, $ratio: false, $thread: false, $settings: $modularscale) {
+}
+
+@function ms-function($v: 0, $base: false, $ratio: false, $thread: false, $settings: $modularscale) {
 
   // Parse settings
   $ms-settings: ms-settings($base,$ratio,$thread,$settings);

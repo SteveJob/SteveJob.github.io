@@ -4,21 +4,23 @@ updated: 2019-02-24
 layout: 2017/sheet
 ---
 
-### toString
+### iterator
 
-```
-var value = [{}];
+javascript的Iterable接口是指Array、Map、Set、String、TypedArray、arguments、NodeList这些原生类上实现了**Symbol.iterator()**方法。当这些类的实例调用**Symbol.iterator()**方法时，会得到一个**Iterator**，又叫遍历器，通过这个遍历器，你可以遍历整个数据结构的值。
 
-Array.prototype.toString.call(value);
-> '[object Object]'
+```ts
+interface Iterable {
+  [Symbol.iterator]() : Iterator,
+}
 
-Object.prototype.toString.call(value);
-> '[object Array]'
+interface Iterator {
+  next(value?: any) : IterationResult,
+}
 
-value.toString();
-> '[object Object]'
-
-**结论：** Array对象重写了Object的toString()方法。
+interface IterationResult {
+  value: any,
+  done: boolean,
+}
 ```
 
 ### Status codes
