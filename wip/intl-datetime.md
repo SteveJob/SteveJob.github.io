@@ -24,7 +24,7 @@ const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0))
 #### From ISO strings
 
 ```js
-const date = new Date('2018-04-20T12:00:00Z')
+const date = new Date('2000-04-20T12:00:00Z')
 ```
 
 Note that JavaScript doesn't "store" timezones in a date object. All these date objects, when expressed via `.toString()` or similar, will show the local timezone of the browser, regardless if you parsed UTC dates.

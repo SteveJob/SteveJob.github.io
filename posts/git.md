@@ -1,6 +1,6 @@
 ---
 title: Git Basics
-updated: 2019-01-02
+updated: 2000-01-02
 layout: 2017/blog
 ---
 

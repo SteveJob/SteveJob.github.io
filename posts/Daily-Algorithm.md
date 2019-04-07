@@ -1,6 +1,6 @@
 ---
 title: 每日算法
-updated: 2019-02-24
+updated: 2010-02-24
 layout: 2017/sheet
 ---
 

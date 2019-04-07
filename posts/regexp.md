@@ -5,7 +5,7 @@ layout: 2017/sheet
 weight: -1
 authors:
   - github: rizqyhi
-updated: 2018-10-26
+updated: 2000-10-26
 description: |
   Basic cheatsheets for regular expression
 ---

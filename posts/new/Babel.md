@@ -1,6 +1,6 @@
 ---
 title: Babel技术
-updated: 2019-02-26
+updated: 2010-02-26
 layout: 2017/sheet
 intro: 我的babel心得
 ---

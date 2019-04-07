@@ -2,7 +2,7 @@
 title: Vim
 category: Vim
 layout: 2017/sheet
-updated: 2018-09-11
+updated: 2000-09-11
 weight: -10
 intro: Vim is a very efficient text editor. This reference was made for Vim 8.0.   
  For shortcut notation, see `:help key-notation`.

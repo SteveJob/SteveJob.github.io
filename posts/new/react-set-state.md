@@ -1,8 +1,8 @@
 ---
-title: React16.8 setState实现原理
+title: Fiber 架构下 React setState 的实现原理
 updated: 2019-03-09
 layout: 2017/blog
-intro: React16.8 setState实现原理。
+intro: 基于 React 16.8 源码，分析使用频率最高的 setState 的实现。
 ---
 
 ReactComponent

@@ -2,7 +2,7 @@
 title: scp
 category: CLI
 layout: 2017/sheet
-updated: 2018-12-25
+updated: 2000-12-25
 authors:
   - github: vastpeng
 ---
