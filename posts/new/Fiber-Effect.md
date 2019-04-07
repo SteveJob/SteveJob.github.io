@@ -1,0 +1,11 @@
+具有Placement effect的组件类型
+
+HostRoot
+ClassComponent
+IndetermiateComponent
+LazyComponent
+IncompleteClassComponent
+SuspenseComponent
+DehydratedSuspenseComponent
+
+影响最终的页面dom

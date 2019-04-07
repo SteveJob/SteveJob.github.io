@@ -25,21 +25,20 @@ interface IterationResult {
 
 ### Status codes
 
-| Code                  | Description                                  |
-| --------------------- | -------------------------------------------- |
-| `200 OK`              | Successful get, patch (return a JSON object) |
-| `201 Created`         | Successful post (return a JSON object)       |
-| `202 Accepted`        | Successful post, delete, path - async        |
-| `204 No content`      | Successful delete                            |
-| `206 Partial content` | Successful get - async                       |
+```js
+①element.clientHeight/element.clientWidth
 
-### Error status
+②
+element.scrollTop/element.scrollLeft（自身元素滚动距离）
+element.offsetTop/element.offsetLeft（相对父元素offsetParent的偏移）
 
-| Code                       | Description                       |
-| -------------------------- | --------------------------------- |
-| `401 Unauthorized`         | Not authenticated                 |
-| `403 Forbidden`            | Authenticated, but no permissions |
-| `422 Unprocessable entity` | Validation                        |
+③
+element.scrollHeight/element.scrollWidth（自身元素真实宽高度）
+element.offsetHeight/element.offsetWidth（自身元素真实宽高度）
+
+① + ② = ③
+```
+
 
 ### Errors
 
