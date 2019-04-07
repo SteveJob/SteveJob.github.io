@@ -1,6 +1,6 @@
 ---
 title: Javascript Tips
-updated: 2019-02-24
+updated: 2018-07-01
 layout: 2017/sheet
 ---
 

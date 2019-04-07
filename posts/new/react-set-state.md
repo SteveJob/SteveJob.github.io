@@ -3,6 +3,7 @@ title: Fiber 架构下 React setState 的实现原理
 updated: 2019-03-09
 layout: 2017/blog
 intro: 基于 React 16.8 源码，分析使用频率最高的 setState 的实现。
+  <a target="_blank" class="tagline" href="https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate">→ 即将更新 setState Vlog</a>
 ---
 
 ReactComponent

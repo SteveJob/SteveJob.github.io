@@ -1,6 +1,6 @@
 ---
 title: React Redux 源码
-updated: 2019-02-21
+updated: 2018-04-01
 layout: 2017/blog
 ---
 

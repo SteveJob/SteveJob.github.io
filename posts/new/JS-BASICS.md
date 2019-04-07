@@ -1,6 +1,6 @@
 ---
 title: Javascript 基础
-updated: 2019-02-21
+updated: 2018-02-21
 layout: 2017/blog
 ---
 
