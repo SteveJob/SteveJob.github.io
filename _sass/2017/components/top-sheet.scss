@@ -24,13 +24,13 @@
     & > .info {
       background: linear-gradient(
         15deg,
-        $base-a,
-        adjust-color($base-a, $lightness: 4%, $hue: 20deg));
+        $theme-color,
+        adjust-color($theme-color, $lightness: 4%, $hue: 20deg));
     }
 
     &:hover > .info,
     &:focus > .info {
-      background: darken($base-a, 8%);
+      background: darken($theme-color, 8%);
     }
   }
 
@@ -38,13 +38,13 @@
     & > .info {
       background: linear-gradient(
         15deg,
-        $base-mute,
-        adjust-color($base-mute, $lightness: 4%, $hue: -10deg));
+        #108060,
+        adjust-color(#108060, $lightness: 4%, $hue: 20deg));
     }
 
     &:hover > .info,
     &:focus > .info {
-      background: darken($base-mute, 8%);
+      background: darken(#108060, 8%);
     }
   }
 
@@ -52,13 +52,13 @@
     & > .info {
       background: linear-gradient(
         15deg,
-        $base-c,
-        adjust-color($base-c, $lightness: 2%, $hue: 6deg));
+        #2c5fab,
+        adjust-color(#2c5fab, $lightness: 4%, $hue: 20deg));
     }
 
     &:hover > .info,
     &:focus > .info {
-      background: darken($base-c, 8%);
+      background: darken(#2c5fab, 8%);
     }
   }
 

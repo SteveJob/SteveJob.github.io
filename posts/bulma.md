@@ -1,6 +1,6 @@
 ---
 title: Bulma
-category: CSS
+category: 其他
 layout: 2017/sheet
 prism_languages: [css, html]
 weight: -1

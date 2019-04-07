@@ -2,7 +2,6 @@
 title: Sass
 category: CSS
 layout: 2017/sheet
-tags: [Featured]
 updated: 2017-08-26
 weight: -5
 keywords:

@@ -2,11 +2,9 @@
 title: Vim
 category: Vim
 layout: 2017/sheet
-tags: [Featured]
 updated: 2018-09-11
 weight: -10
-intro: |
- [Vim](http://www.vim.org/) is a very efficient text editor. This reference was made for Vim 8.0.   
+intro: Vim is a very efficient text editor. This reference was made for Vim 8.0.   
  For shortcut notation, see `:help key-notation`.
 ---
 

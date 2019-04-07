@@ -1,10 +1,10 @@
 home:
-  title: "Steve's cheatsheets"
+  title: "Steve's blog"
   tagline: |
-    Hey! I'm <a href='https://github.com/SteveJob'>@Steve</a> and this is a modest collection of cheatsheets I've written.
+    <a class="tagline" target="_blank" href='https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate'>React 源码系列 Vlog</a>
 
 top_nav:
-  title: Steve Blog & Cheetsheet
+  title: Steve Blog
   edit: Edit
   edit_on_github: Edit this page on GitHub
 

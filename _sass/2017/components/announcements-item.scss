@@ -17,7 +17,7 @@
   & > .title {
     @include font-size(1);
     font-weight: normal;
-    color: $base-a;
+    color: $theme-color;
     margin: 0;
     padding: 0;
   }

@@ -12,8 +12,6 @@
 
 </head><body>
 
-<!-- {% include 2017/top-nav.html page=page is_home=true noedit=true noback=true %} -->
-
 {% if site.data.carbon.enabled %}
   <div class='SideAd' role='complementary'>
     <script async src='{{ site.data.carbon.src }}' id="_carbonads_js"></script>
@@ -50,11 +48,11 @@
     {% endfor %}
 
     <h2 class='category item' data-js-searchable-header>
-      <span>Recently updated</span>
+      <span>最近更新</span>
     </h2>
 
     {% for page in recent_pages reversed %}
-      {% if forloop.index <= 18 %}
+      {% if forloop.index <= 12 %}
         {% include 2017/pages-list-item.html page=page class='article item' %}
       {% endif %}
     {% endfor %}
@@ -74,12 +72,12 @@
       {% endfor %}
     {% endfor %}
 
-    <div class='message item missing-message'>
+    <!-- <div class='message item missing-message'>
       <h3>See something missing?</h3>
       <p>
         <a class='push-button' href='{{ site.github.repository_url }}/issues/907'>Request cheatsheet</a>
       </p>
-    </div>
+    </div> -->
   </div>
 </div>
 

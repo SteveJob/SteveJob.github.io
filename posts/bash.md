@@ -2,7 +2,6 @@
 title: Bash scripting
 category: CLI
 layout: 2017/sheet
-tags: [Featured]
 updated: 2018-12-25
 keywords:
   - Variables

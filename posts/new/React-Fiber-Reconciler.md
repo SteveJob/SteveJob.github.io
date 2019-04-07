@@ -1,9 +1,13 @@
 ---
-title: React Fiber Reconciler - ReactDOM.render是如何工作的？
+title: ReactDOM.render 是如何工作的？
 updated: 2019-02-27
 layout: 2017/blog
-intro: 对比React两种调度方法实现，找出可以学习的架构设计知识。
+intro: React Fiber调度流程一览。
+  <a target="_blank" class="tagline" href="https://www.bilibili.com/video/av47452571">Vlog</a>
 ---
+
+[ReactDOM.render 源码探索 Fiber 调度 Vlog](https://www.bilibili.com/video/av47452571)
+
 
 legacyRenderSubtreeIntoContainer
 ---------
@@ -172,12 +176,6 @@ workLoop开始执行之初，nextUnitOfWork已经在上一步performWorkOnRoot�
 
 ![beginWork](/assets/img/beginWork.gif)
 
-**updateHostRoot**
-
-![updateHostRoot](/assets/img/updateHostRoot.gif)
-
-## completeRoot
-
 ## commitRoot(ReactFiberScheduler.js)
 
 prepareForCommit
@@ -190,9 +188,3 @@ root.current = finishedWork;
 
 second pass
 >In the second pass we'll perform all life-cycles and ref callbacks. Life-cycles happen as a separate pass so that all placements, updates, and deletions in the entire tree have already been invoked. This pass also triggers any renderer-specific initial effects.
-
-commitLifeCycles(ReactFiberCommitWork.js)
-
-commitUpdateQueue(ReactFiberCommitWork.js)
-
-commitUpdateQueue(ReactUpdateQueue.js)

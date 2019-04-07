@@ -1,7 +1,7 @@
 ---
-title: Javascript Basics
-updated: 2019-02-24
-layout: 2017/sheet
+title: Git Basics
+updated: 2019-01-02
+layout: 2017/blog
 ---
 
 ### git reset
