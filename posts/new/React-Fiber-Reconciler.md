@@ -3,7 +3,7 @@ title: Fiber 架构下 ReactDOM.render 是如何工作的？
 updated: 2019-02-27
 layout: 2017/blog
 intro: React Fiber调度流程一览。
-  <a target="_blank" class="tagline" href="https://www.bilibili.com/video/av47452571">→ 推荐Vlog</a>
+  <a target="_blank" class="tagline" href="https://www.bilibili.com/video/av47452571">→ 推荐 Vlog</a>
 ---
 
 [ReactDOM.render 源码探索 Fiber 调度 Vlog](https://www.bilibili.com/video/av47452571)

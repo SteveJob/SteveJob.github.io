@@ -3,7 +3,7 @@ title: Fiber 架构下 React key 的实现原理
 updated: 2019-03-10
 layout: 2017/blog
 intro: 深入 React 16.8 源码，深究 React Key 的每一个实现细节。
-  <a target="_blank" class="tagline" href="https://www.bilibili.com/video/av48472416">→ Vlog</a>
+  <a target="_blank" class="tagline" href="https://www.bilibili.com/video/av48472416">→ 推荐 Vlog</a>
 ---
 
 [React Key的实现原理 Vlog](https://www.bilibili.com/video/av48472416)
