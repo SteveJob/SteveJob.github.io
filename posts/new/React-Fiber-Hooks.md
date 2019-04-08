@@ -44,7 +44,12 @@ const ReactCurrentDispatcher = {
 
 不难理解，在 React 调用 Function Component 之前一定对 `ReactCurrentDispatcher` 重新赋了值。
 
-不妨放弃这个思路，一起来看一下，React 是如何挂载和更新 Function Component 的？进入源码之前，准备了一个简单的参考用例：
+不妨放弃这个思路，一起来看一下，React 是如何挂载和更新 Function Component 的？
+
+
+## Function Component 与 useState 的协作
+
+进入源码之前，准备了一个简单的参考用例：
 
 ```js
 const {createRef, useState} = React;
@@ -71,7 +76,7 @@ ReactDOM.render(
 );
 
 btnRef.current.dispatchEvent(
-  new Event('input', {bubbles: true, cancelable: true}),
+  new Event('click', {bubbles: true, cancelable: true}),
 );
 ```
 
@@ -196,7 +201,40 @@ renderedWork.memoizedState = firstWorkInProgressHook;
 
 至此，我们挂载流程中对 hooks 的处理就结束了。
 
+
+## Function Component 更新 state
+
 下面一起看一下，更新流程，如何根据 Fiber 上的 hook 链表，为 Function Component 计算出新的 state。
+
+在之前的用例中，我们通过 ref 拿到了 button 组件的 DOM，并在这个 DOM 上派发了一个自定义事件。这个事件的监听函数会通过调用 useState 返回的 setCount 为 Function Component 更新 state。
+
+```js
+btnRef.current.dispatchEvent(
+  new Event('click', {bubbles: true, cancelable: true}),
+);
+```
+
+上节我们说到 mountState 时，留下来一个疑问：dispatch 是什么？回归一下 mountState 中的代码：
+
+```js
+...
+const dispatch: Dispatch<
+  BasicStateAction<S>,
+> = (queue.dispatch = (dispatchAction.bind(
+  null,
+  // Flow doesn't know this is non-null, but we do.
+  ((currentlyRenderingFiber: any): Fiber),
+  queue,
+): any));
+return [hook.memoizedState, dispatch];
+```
+
+dispatch 方法是一个被注入了相应 hook 的 `queue` 和相应 Function Component 的 `fiber` 的 dispatchAction 方法。
+`queue`，和 `fiber` 之间有什么关系吗？是 dispatchAction 利用 `queue` 更新了 `fiber` 吗？
+
+进入源码：
+
+*packages/react-reconciler/src/ReactFiberHooks.js - Line:1009*
 
 ```js
 function dispatchAction<S, A>(
@@ -204,112 +242,61 @@ function dispatchAction<S, A>(
   queue: UpdateQueue<S, A>,
   action: A,
 ) {
+  ...
+  ...
+  const update: Update<S, A> = {
+    expirationTime,
+    action,
+    eagerReducer: null,
+    eagerState: null,
+    next: null,
+  };
 
-  const alternate = fiber.alternate;
-  if (
-    fiber === currentlyRenderingFiber ||
-    (alternate !== null && alternate === currentlyRenderingFiber)
-  ) {
-    // This is a render phase update. Stash it in a lazily-created map of
-    // queue -> linked list of updates. After this render pass, we'll restart
-    // and apply the stashed updates on top of the work-in-progress hook.
-    didScheduleRenderPhaseUpdate = true;
-    const update: Update<S, A> = {
-      expirationTime: renderExpirationTime,
-      action,
-      eagerReducer: null,
-      eagerState: null,
-      next: null,
-    };
-    if (renderPhaseUpdates === null) {
-      renderPhaseUpdates = new Map();
-    }
-    const firstRenderPhaseUpdate = renderPhaseUpdates.get(queue);
-    if (firstRenderPhaseUpdate === undefined) {
-      renderPhaseUpdates.set(queue, update);
-    } else {
-      // Append the update to the end of the list.
-      let lastRenderPhaseUpdate = firstRenderPhaseUpdate;
-      while (lastRenderPhaseUpdate.next !== null) {
-        lastRenderPhaseUpdate = lastRenderPhaseUpdate.next;
-      }
-      lastRenderPhaseUpdate.next = update;
-    }
+  // Append the update to the end of the list.
+  const last = queue.last;
+  if (last === null) {
+    // This is the first update. Create a circular list.
+    update.next = update;
   } else {
-    flushPassiveEffects();
-
-    const currentTime = requestCurrentTime();
-    const expirationTime = computeExpirationForFiber(currentTime, fiber);
-
-    const update: Update<S, A> = {
-      expirationTime,
-      action,
-      eagerReducer: null,
-      eagerState: null,
-      next: null,
-    };
-
-    // Append the update to the end of the list.
-    const last = queue.last;
-    if (last === null) {
-      // This is the first update. Create a circular list.
-      update.next = update;
-    } else {
-      const first = last.next;
-      if (first !== null) {
-        // Still circular.
-        update.next = first;
-      }
-      last.next = update;
+    const first = last.next;
+    if (first !== null) {
+      // Still circular.
+      update.next = first;
     }
-    queue.last = update;
-
-    if (
-      fiber.expirationTime === NoWork &&
-      (alternate === null || alternate.expirationTime === NoWork)
-    ) {
-      // The queue is currently empty, which means we can eagerly compute the
-      // next state before entering the render phase. If the new state is the
-      // same as the current state, we may be able to bail out entirely.
-      const eagerReducer = queue.eagerReducer;
-      if (eagerReducer !== null) {
-        let prevDispatcher;
-        if (__DEV__) {
-          prevDispatcher = ReactCurrentDispatcher.current;
-          ReactCurrentDispatcher.current = InvalidNestedHooksDispatcherOnUpdateInDEV;
-        }
-        try {
-          const currentState: S = (queue.eagerState: any);
-          const eagerState = eagerReducer(currentState, action);
-          // Stash the eagerly computed state, and the reducer used to compute
-          // it, on the update object. If the reducer hasn't changed by the
-          // time we enter the render phase, then the eager state can be used
-          // without calling the reducer again.
-          update.eagerReducer = eagerReducer;
-          update.eagerState = eagerState;
-          if (is(eagerState, currentState)) {
-            // Fast path. We can bail out without scheduling React to re-render.
-            // It's still possible that we'll need to rebase this update later,
-            // if the component re-renders for a different reason and by that
-            // time the reducer has changed.
-            return;
-          }
-        } catch (error) {
-          // Suppress the error. It will throw again in the render phase.
-        } finally {
-          if (__DEV__) {
-            ReactCurrentDispatcher.current = prevDispatcher;
-          }
-        }
-      }
-    }
-    scheduleWork(fiber, expirationTime);
+    last.next = update;
   }
+  queue.last = update;
+
+  if (
+    fiber.expirationTime === NoWork &&
+    (alternate === null || alternate.expirationTime === NoWork)
+  ) {
+    const eagerReducer = queue.eagerReducer;
+    if (eagerReducer !== null) {
+      let prevDispatcher;
+      try {
+        const currentState: S = (queue.eagerState: any);
+        const eagerState = eagerReducer(currentState, action);
+        update.eagerReducer = eagerReducer;
+        update.eagerState = eagerState;
+      }
+    }
+  }
+  scheduleWork(fiber, expirationTime);
 }
 ```
 
-## Function 与 useState 的协作
+我们看到，跟 Class Component 的 setState 类似，这里同样创建了一个 Update ，并将其加入位于 queue 上的 Update 链表。
+接下来的一段代码非常很像 Redux：
 
-首先，我们来看
+```js
+const currentState: S = (queue.eagerState: any);
+const eagerState = eagerReducer(currentState, action);
+update.eagerReducer = eagerReducer;
+update.eagerState = eagerState;
+```
 
-## Function 与 useEffect 的协作
+用 queue 上的 reducer 和 state ，结合用户传进来的 action ，拿到了更新后 state 。
+这样，我们就计算出了 Function Component 的新 state 。这个 state 保存在 queue 上的 Update 链表 lastUpdate  上。
+如果你还记得上一节，挂载流程中我们是怎么处理 hook 的，应该可以推导出，这个 state 怎么通过 Function Component 的 fiber 拿到。
+提醒你一下，Function Component 的 fiber 节点上，有一个 `memoizedState` 属性，那个属性里保存着我们的 hook 链表。
