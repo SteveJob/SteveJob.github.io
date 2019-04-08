@@ -254,3 +254,129 @@ function interactiveUpdates<A, B, R>(fn: (A, B) => R, a: A, b: B): R {
 待监听函数执行结束后，上述 finally 代码块，将 isBatchingUpdates 重置为 false ，然后统一调用一次 performSyncWork 函数，作用等同于 scheduleWork 函数。这一次，便能够进入 Fiber Chain ，真正开始调度和更新。
 
 ## 在 Fiber 上应用 updateQueue
+
+还记得 enqueueSetState 函数中，创建了一个 update 并放进了组件 fiber 的 updateQueue 中。
+
+```js
+enqueueSetState(inst, payload, callback) {
+  const update = createUpdate(expirationTime);
+  update.payload = payload;
+  ...
+  enqueueUpdate(fiber, update);
+  scheduleWork(fiber, expirationTime);
+}
+```
+
+由于我们在用例中给 setState 传递了一个函数：
+
+```js
+this.setState(({ count }) => ({
+  count: count + 1,
+}));
+```
+
+所以，updateQueue 里的 `update.payload` ，就是这个函数。
+这个函数需要接收更新前的组件 state ，返回的对象会被合并到新的 state 。这一切是何时发生的？
+
+click 事件监听函数执行完成之后，来到遍历 fiber 链表的 workLoop 方法。当 workLoop 遍历到 Example 组件的 fiber 节点，再次进入 updateClassComponent 函数。由于 Example 组件已经挂载，这次走的是更新流程：
+
+```js
+function updateClassInstance(
+  current: Fiber,
+  workInProgress: Fiber,
+  ctor: any,
+  newProps: any,
+  renderExpirationTime: ExpirationTime,
+): boolean {
+  const instance = workInProgress.stateNode;
+  ...
+  const oldState = workInProgress.memoizedState;
+  let newState = (instance.state = oldState);
+  let updateQueue = workInProgress.updateQueue;
+  if (updateQueue !== null) {
+    processUpdateQueue(
+      workInProgress,
+      updateQueue,
+      newProps,
+      instance,
+      renderExpirationTime,
+    );
+    newState = workInProgress.memoizedState;
+  }
+  ...
+  // Update the existing instance's state, props, and context pointers even
+  // if shouldComponentUpdate returns false.
+  instance.props = newProps;
+  instance.state = newState;
+  instance.context = nextContext;
+
+  return shouldUpdate;
+}
+```
+
+可以看出，在 updateClassInstance 函数中，从 fiber 上取出了 setState 时保存了 update 的 updateQueue。
+在 processUpdateQueue 中，将会遍历 updateQueue 上的 update 链表，更新 state 并保存在 `workInProgress.memoizedState`。
+
+```js
+function processUpdateQueue<State>(
+  workInProgress: Fiber,
+  queue: UpdateQueue<State>,
+  props: any,
+  instance: any,
+  renderExpirationTime: ExpirationTime,
+): void {
+  ...
+  // These values may change as we process the queue.
+  let newBaseState = queue.baseState;
+  let newFirstUpdate = null;
+  let newExpirationTime = NoWork;
+
+  // Iterate through the list of updates to compute the result.
+  let update = queue.firstUpdate;
+  let resultState = newBaseState;
+  while (update !== null) {
+    const updateExpirationTime = update.expirationTime;
+    ...
+    resultState = getStateFromUpdate(
+      workInProgress,
+      queue,
+      update,
+      resultState,
+      props,
+      instance,
+    );
+    const callback = update.callback;
+    ...
+    // Continue to the next update.
+    update = update.next;
+  }
+  ...
+}
+```
+
+具体从用户传递的 payload 中获取新的 state 的实现在 getStateFromUpdate 函数中：
+
+```js
+function getStateFromUpdate<State>(
+  workInProgress: Fiber,
+  queue: UpdateQueue<State>,
+  update: Update<State>,
+  prevState: State,
+  nextProps: any,
+  instance: any,
+): any {
+  const payload = update.payload;
+  let partialState;
+  if (typeof payload === 'function') {
+    partialState = payload.call(instance, prevState, nextProps);
+  } else {
+    partialState = payload;
+  }
+  if (partialState === null || partialState === undefined) {
+    return prevState;
+  }
+  return Object.assign({}, prevState, partialState);
+}
+```
+
+完。
