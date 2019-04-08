@@ -398,7 +398,7 @@ function updateReducer<S, I, A>(
 }
 ```
 
-执行跟挂载时一样的操作，将新的更新后的 hook 链表更新到新的 workInProgress fiber 上：
+执行跟挂载时一样的操作，将更新后的 hook 链表放到 workInProgress fiber 上，下次更新组件，使用 Fiber 节点上保存的 state 执行同样的流程即可：
 
 ```js
 renderedWork.memoizedState = firstWorkInProgressHook;
