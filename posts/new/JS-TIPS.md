@@ -1,6 +1,6 @@
 ---
 title: Javascript Tips
-updated: 2018-07-01
+updated: 2018-01-11
 layout: 2017/sheet
 ---
 
@@ -25,9 +25,9 @@ value.toString();
 
 ```
 只有当页面重新加载时才会重新赋值。
-如在某模块定义:
+如在 ES6 模块定义:
 const value = localStorage.getItem('key_of_school');
-当你在页面其他操作设置localStorage时，不刷新页面value的值是不会改变的。
+当你在页面其他操作设置 localStorage 时，不刷新页面 value 的值是不会改变的。
 一个解决办法是通过函数调用，或放进类中等方法动态获取。
 ```
 
@@ -52,9 +52,9 @@ function _getOffset(element) {
 ### element attribute
 
 ```
-获取DOM element的css属性对象
+获取DOM element 的 css 属性对象
 CSSStyleDeclaration declaration = document.defaultView.getComputedStyle(element, null)
-根据css属性名获取属性值
+根据 css 属性名获取属性值
 declaration.getPropertyValue('position');
 
 IE兼容办法
