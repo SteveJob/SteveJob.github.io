@@ -2,15 +2,21 @@
 title: Fiber 架构下 React setState 的实现原理
 updated: 2019-03-09
 layout: 2017/blog
-intro: 基于 React 16.8 源码，分析使用频率最高的 setState 的实现。
+intro: 基于 React 16.8 源码，分析使用频率最高的 setState 的实现细节。
   <a target="_blank" class="tagline" href="https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate">→ 即将更新 setState Vlog</a>
 ---
 
-ReactComponent
+组件的基类 ReactComponent
 ---------
 {: .-no-hide}
 
-> React.Component是所有组件的基类
+由于 Class Component 继承自 React Component，所以当我们在 React 组件里调用 setState 方法时，实际上是在调用基类 React Component 的 setState 。然而，当我们想了解 React 是怎么实现声明式编程 —— `setState` 万金油的时候，却发现，它根本不在其中。
+
+React Component 类并没有实现更新组件 state 的逻辑。因为在 React 的设计中，更新 state 是调度工作，统一交给react-reconciler 去做。
+这样就可以很方便地把这种编程范式应用到 iOS 、Android 或 canvas 等等视图中去。
+所以，这里的setState只是把工作交接给一个叫 **this.updater** 的东西，毋庸置疑，`updater` 一定来自 react-reconciler 。
+
+*packages/react/src/ReactBaseClasses.js - Line:21*
 
 ```js
 function Component(props, context, updater) {
@@ -24,21 +30,18 @@ function Component(props, context, updater) {
 }
 
 Component.prototype.setState = function(partialState, callback) {
-  invariant(
-    typeof partialState === 'object' ||
-      typeof partialState === 'function' ||
-      partialState == null,
-    'setState(...): takes an object of state variables to update or a ' +
-      'function which returns an object of state variables.',
-  );
   this.updater.enqueueSetState(this, partialState, callback, 'setState');
 };
 ```
 
-当我们在React组件里调用setState方法时，实际上是在调用基类Component的setState。Component类本身并不会实现更新组件state的逻辑，因为在React的设计中，更新state是调度工作，统一交给react-reconciler去做，所以，这里的setState只是把工作交接给一个叫**this.updater**的东西。
+从 Component 基类的定义上看，`updater` 在 Class Component 实例化时被赋初始值。
+因此，我们需要从组件实例化的地方出发，才能找到 `updater` 的具体实现。你也可以参考我录制的 
+[React Key的实现原理](https://www.bilibili.com/video/av48472416) 和 [ReactDOM.render 源码探索 Fiber 调度](https://www.bilibili.com/video/av47452571) 两个 Vlog。
 
 
-## this.updater
+## 寻找 updater
+
+
 
 > ReactFiberClassComponent.js文件中的adoptClassInstance中有对React.Component实例的updater属性(this.updater)做赋值操作；constructClassInstance方法里调用了adoptClassInstance方法。ReactFiberBeginWork.js中mountIndeterminateComponent函数有调用adoptClassInstance；updateClassComponent、mountIncompleteClassComponent两个函数中有调用constructClassInstance。
 

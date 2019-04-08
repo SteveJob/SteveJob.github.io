@@ -19,6 +19,8 @@ Hooks 赋予了函数组件使用更多 React 特性的能力。
 
 查看 React 导出的 `useState` 方法，会发现，它仅仅是 `ReactCurrentDispatcher` 对象的代理方法：
 
+*packages/react/src/ReactHooks.js - Line:68*
+
 ```js
 function useState<S>(initialState: (() => S) | S) {
   const dispatcher = resolveDispatcher();
@@ -27,6 +29,8 @@ function useState<S>(initialState: (() => S) | S) {
 ```
 
 resolveDispatcher() 函数返回了`ReactCurrentDispatcher` 对象的 current，然而当我们打开 ReactCurrentDispatcher.js 文件才发现，上面并没有 `useState` 等 Hooks 方法。
+
+*packages/react/src/ReactCurrentDispatcher.js - Line:15*
 
 ```js
 /**
@@ -301,3 +305,103 @@ update.eagerState = eagerState;
 这样，我们就计算出了 Function Component 的新 state 。这个 state 保存在 queue 上的 Update 链表 lastUpdate  上。
 如果你还记得上一节，挂载流程中我们是怎么处理 hook 的，应该可以推导出，这个 state 怎么通过 Function Component 的 fiber 拿到。
 提醒你一下，Function Component 的 fiber 节点上，有一个 `memoizedState` 属性，那个属性里保存着我们的 hook 链表。
+
+## 调度并提交 Fiber Chain 刷新页面
+
+更新完了 Function Component 的 fiber 节点，还有最后一件重要的事，将 fiber 的改动应用到页面上。
+这个过程分成 `render` 和 `commit` 两个阶段。
+
+在 `render` 阶段，React 调度器从 Fiber 链表的起点 RootFiber 开始，一路向下查找，来到了更新我们 Function Component 的 updateFunctionComponent 函数：
+
+*packages/react-reconciler/src/ReactFiberBeginWork.js - Line:535*
+
+```js
+function updateFunctionComponent(
+  current,
+  workInProgress,
+  Component,
+  nextProps: any,
+  renderExpirationTime,
+) {
+  ...
+  let nextChildren;
+  ...
+  nextChildren = renderWithHooks(
+    current,
+    workInProgress,
+    Component,
+    nextProps,
+    context,
+    renderExpirationTime,
+  );
+  ...
+  reconcileChildren(
+    current,
+    workInProgress,
+    nextChildren,
+    renderExpirationTime,
+  );
+  return workInProgress.child;
+}
+```
+
+这里再次调用了前面详细分析过的 `renderWithHooks` 函数，不过这次调度是更新，所以Function Component 中使用的 hook 方法是 `HooksDispatcherOnUpdate` 中的实现。Function Component 中调用 useState 时，实际上是在调用 `updateState`：
+
+*packages/react-reconciler/src/ReactFiberHooks.js - Line:729*
+
+```js
+function updateState<S>(
+  initialState: (() => S) | S,
+): [S, Dispatch<BasicStateAction<S>>] {
+  return updateReducer(basicStateReducer, (initialState: any));
+}
+```
+
+在 updateReducer 函数中，React 调用 `updateWorkInProgressHook` 将 fiber 上的 hook 链表重新拷贝了一份。
+这样，我们只在新拷贝出来的 hook 链表上操作，就不会影响原来的 hook 链表。
+
+接下来，都是在这个新的 hook 链表上进行的操作。根据 hook 节点属性 queue 上的 update 链表更新 hook 的 memoizedState 。沿着在 Function Component 里调用的 useXXX 顺序，在 hook 链表上操作的节点不断向 next 延伸。
+由于 我们已经重新拷贝了原来的 hook 链表，所以，这些修改并不会影响 current fiber 上的 memoizedState 。最后，调用完所有的 useXXX 方法，Function Component 返回了最新渲染出的 ReactElement 。
+
+*packages/react-reconciler/src/ReactFiberHooks.js - Line:571*
+
+```js
+function updateReducer<S, I, A>(
+  reducer: (S, A) => S,
+  initialArg: I,
+  init?: I => S,
+): [S, Dispatch<A>] {
+  const hook = updateWorkInProgressHook();
+  const queue = hook.queue;
+  ...
+  do {
+    const updateExpirationTime = update.expirationTime;
+    // Process this update.
+    if (update.eagerReducer === reducer) {
+      // If this update was processed eagerly, and its reducer matches the
+      // current reducer, we can use the eagerly computed state.
+      newState = ((update.eagerState: any): S);
+    } else {
+      const action = update.action;
+      newState = reducer(newState, action);
+    }
+    prevUpdate = update;
+    update = update.next;
+  } while (update !== null && update !== first);
+  ...
+  hook.memoizedState = newState;
+  hook.baseUpdate = newBaseUpdate;
+  hook.baseState = newBaseState;
+
+  queue.eagerReducer = reducer;
+  queue.eagerState = newState;
+}
+```
+
+执行跟挂载时一样的操作，将新的更新后的 hook 链表更新到新的 workInProgress fiber 上：
+
+```js
+renderedWork.memoizedState = firstWorkInProgressHook;
+```
+
+完。
