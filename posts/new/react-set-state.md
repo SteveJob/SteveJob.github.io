@@ -220,4 +220,37 @@ function scheduleRootUpdate(
 还有就是他们的 fiber 节点要执行的更新 `update.payload` 不同。
 
 enqueueUpdate 函数将此次 setState 所要执行的更新放到 fiber 上的更新队列 `updateQueue`中。
-然后执行 scheduleWork 进入 Fiber Chain。
+然后执行 scheduleWork 开始调度流程。
+
+在 scheduleWork 执行过程中，如果发现当前处于 **批量更新** 模式，会退出调度流程：
+
+```js
+if (isBatchingUpdates) {
+  return;
+}
+```
+
+由于我们用例中的 setState 是在事件监听函数中调用的，事件监听函数执行前设置了 isBatchingUpdates 为 true 。
+所以调用 scheduleWork 函数后并不会进入 Fiber Chain。
+
+```js
+function interactiveUpdates<A, B, R>(fn: (A, B) => R, a: A, b: B): R {
+  ...
+  const previousIsBatchingUpdates = isBatchingUpdates;
+  isBatchingUpdates = true;
+  try {
+    return runWithPriority(UserBlockingPriority, () => {
+      return fn(a, b);
+    });
+  } finally {
+    isBatchingUpdates = previousIsBatchingUpdates;
+    if (!isBatchingUpdates && !isRendering) {
+      performSyncWork();
+    }
+  }
+}
+```
+
+待监听函数执行结束后，上述 finally 代码块，将 isBatchingUpdates 重置为 false ，然后统一调用一次 performSyncWork 函数，作用等同于 scheduleWork 函数。这一次，便能够进入 Fiber Chain ，真正开始调度和更新。
+
+## 在 Fiber 上应用 updateQueue
