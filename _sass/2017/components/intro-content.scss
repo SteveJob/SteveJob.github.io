@@ -20,6 +20,10 @@
   position: relative;
   opacity: .5;
 
+  @media (max-width: 480px) {
+    padding: 8px 12px;
+  }
+
   &:after {
     content: '';
     position: absolute;
@@ -30,6 +34,10 @@
     border: solid 3px $theme-color;
     border-right: unset;
     border-bottom: unset;
+
+    @media (max-width: 480px) {
+      left: 0px;
+    }
   }
 
   &:before {
@@ -42,6 +50,10 @@
     border: solid 3px $theme-color;
     border-left: unset;
     border-top: unset;
+
+    @media (max-width: 480px) {
+      right: 0px;
+    }
   }
 
   .preface {

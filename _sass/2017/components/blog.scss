@@ -1,6 +1,10 @@
 .post-content.blog {
   padding: 24px 68px;
 
+  @media (max-width: 480px) {
+    padding: 12px 12px;
+  }
+
   .h3-section-list {
     & > .h3-section {
       width: 100%;
