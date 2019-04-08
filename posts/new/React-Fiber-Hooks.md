@@ -6,12 +6,13 @@ intro: React Hooks，站在 Fiber 的肩膀上，起飞。
   <a target="_blank" class="tagline" href="https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate">→ 即将更新 Hooks Vlog</a>
 ---
 
-React 官方文档用独立的一个系列的篇幅介绍了 Hooks ，可见其在 React 中的重要程度。那什么是 Hooks ？
-Hooks 是赋予 Function Component 的武器。React 认为 JavaScript 中 class 是复杂的，学习成本较高。
+React 官方文档用独立的一个系列的篇幅介绍了 Hooks 特性，可见其在 React 中的重要程度。什么是 Hooks ？
+Hooks 是 Function Component 的武器。React 认为 JavaScript 中 class 是复杂的，学习成本较高。
 而 JavaScript 的开发者一直以来对函数情有独钟。从 jQuery 时代开始，各种函数、闭包、自执行。
 Hooks 赋予了函数组件使用更多 React 特性的能力。
+
 使用 Hooks 并不仅仅是为了给编写形式较简单的 Function Component 中加入 state 或 effect ，更能够以 `useXXX` 的形式将 state 和 effect 从组件中彻底抽离。
-这样来看，Hooks 的矛头，似乎不只是对着 Class Component。它甚至想要取代 HOC 、 render props。
+这样来看，Hooks 的矛头，似乎不只是对着 Class Component。它甚至想要取代 HOC 和 render props。
 
 
 ## useState 的定义
