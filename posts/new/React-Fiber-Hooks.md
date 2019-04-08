@@ -214,7 +214,7 @@ btnRef.current.dispatchEvent(
 );
 ```
 
-上节我们说到 mountState 时，留下来一个疑问：dispatch 是什么？回归一下 mountState 中的代码：
+上节我们说到 mountState 时，留下来一个疑问：dispatch 是什么？回顾一下 mountState 中的代码：
 
 ```js
 ...
@@ -230,7 +230,7 @@ return [hook.memoizedState, dispatch];
 ```
 
 dispatch 方法是一个被注入了相应 hook 的 `queue` 和相应 Function Component 的 `fiber` 的 dispatchAction 方法。
-`queue`，和 `fiber` 之间有什么关系吗？是 dispatchAction 利用 `queue` 更新了 `fiber` 吗？
+`queue`，和 `fiber` 之间有什么关系吗？是 dispatchAction 利用 `queue` 更新了 `fiber` 吗？dispatchAction 跟 Redux 中的 dispatch 有关系吗？
 
 进入源码：
 

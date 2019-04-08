@@ -52,7 +52,7 @@
     </h2>
 
     {% for page in recent_pages reversed %}
-      {% if forloop.index <= 10 %}
+      {% if forloop.index <= 9 %}
         {% include 2017/pages-list-item.html page=page class='article item' %}
       {% endif %}
     {% endfor %}
