@@ -1,7 +1,7 @@
 home:
   title: "Steve's blog"
   tagline: |
-    <a class="tagline" target="_blank" href='https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate'>React 源码系列 Vlog</a>
+    <a class="tagline" target="_blank" href='https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate'>→ React 源码系列 Vlog</a>
 
 top_nav:
   title: Steve Blog

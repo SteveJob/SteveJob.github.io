@@ -3,7 +3,6 @@ title: Fiber 架构下 React Hooks 的实现原理
 updated: 2019-04-03
 layout: 2017/blog
 intro: React Hooks，站在 Fiber 的肩膀上，起飞。
-  <a target="_blank" class="tagline" href="https://space.bilibili.com/16464410/video?tid=0&page=1&keyword=&order=pubdate">→ 即将更新 Hooks Vlog</a>
 ---
 
 React 官方文档用独立的一个系列的篇幅介绍了 Hooks 特性，可见其在 React 中的重要程度。什么是 Hooks ？
@@ -85,7 +84,7 @@ btnRef.current.dispatchEvent(
 );
 ```
 
-在 beginWork 时，React 会根据组件类型的不同，调用不同的函数来分别调度。mountIndeterminateComponent 是 React 中调度 Function Component 的 Fiber 节点的函数。
+在开始调度之前，React 会根据组件类型的不同，调用不同的函数来分别调度。mountIndeterminateComponent 是 React 中调度 Function Component 的 Fiber 节点的函数。
 它通过调用 `renderWithHooks`，拿到了组件返回的 ReactElement 对象。
 
 *packages/react-reconciler/src/ReactFiberHooks.js - Line:286*
