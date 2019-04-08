@@ -2,6 +2,8 @@
 title: HTML
 category: HTML
 layout: 2017/sheet
+tags: [Featured]
+updated: 2017-01-03
 ---
 
 ### Head stuff
