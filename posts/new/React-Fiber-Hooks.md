@@ -2,7 +2,7 @@
 title: Fiber 架构下 React Hooks 的实现原理
 updated: 2019-04-03
 layout: 2017/blog
-intro: React Hooks，站在 Fiber 的肩膀上，起飞。
+intro: React Hooks，站在 Fiber 的肩膀上。
 ---
 
 React 官方文档用独立的一个系列的篇幅介绍了 Hooks 特性，可见其在 React 中的重要程度。什么是 Hooks ？
