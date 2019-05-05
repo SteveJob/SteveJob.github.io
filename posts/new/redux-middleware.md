@@ -10,7 +10,7 @@ layout: 2017/blog
 
 redux是大型react应用不可或缺的工具库，是react组件的数据共享中心，是react生态圈的骨架。其中间件架构设计则极大地增加了可扩展性。掌握redux中间件架构不仅可以用来为自己的项目编写redux中间件，更有助于丰富自己的架构设计思想，让下一个流行库的作者是自己，成为可能。此外，这种架构在JavaScript语言世界使用的非常普遍，NodeJS的koa的中间件架构同样如此。
 
-![reduxDataFlow](https://ws4.sinaimg.cn/large/006tNc79ly1g1up59sjz1j30pj0do759.jpg)
+![reduxDataFlow](/assets/img/redux-data-flow.jpg)
 
 如上图，redux实现了单向数据流，
 
@@ -21,7 +21,7 @@ redux是大型react应用不可或缺的工具库，是react组件的数据共�
 
 ## redux中间件架构里的函数式编程
 
-![reduxMiddleware](https://ws4.sinaimg.cn/large/006tNc79ly1g1up5o2v5vj31hg0bstaa.jpg)
+![reduxMiddleware](/assets/img/redux-middleware.jpg)
 
 在面向对象语言里，`过滤器`是继承某个特定父类或实现某个特定接口的`class`。在函数式编程语言中概念类似，`中间件`是一个具有特定签名的函数。
 
@@ -341,7 +341,7 @@ dispatch
 ```
 action => dispatch1(action) => dispatch2(action) => dispatch3(action) => dispatch(action)
 ```
-![redux](https://ws4.sinaimg.cn/large/006tNc79ly1g1up68we7ug30g00a0x6q.gif)
+![redux](/assets/img/redux-middleware-keynote.gif)
 
-![reduxMiddleware](https://ws4.sinaimg.cn/large/006tNc79ly1g1up5o2v5vj31hg0bstaa.jpg)
+![reduxMiddleware](/assets/img/redux-middleware.jpg)
 
